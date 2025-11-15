@@ -1,0 +1,48 @@
+                                                                  //Newton-s-Forward-Interpolation Code
+
+#include <stdio.h>
+		#include<math.h>
+
+int factorial(int n) {
+    int f = 1;
+    for (int i = 2; i <= n; i++)
+        f *= i;
+    return f;
+}
+
+int main() {
+    int n = 4;
+    float x[] = {1, 2, 3, 4};           // x values
+    float y[4][4];                      // forward difference table
+    float value = 2.5;                  // point to interpolate
+    float h, u, result;
+
+    // y values
+    y[0][0] = 1;
+    y[1][0] = 8;
+    y[2][0] = 27;
+    y[3][0] = 64;
+
+    // Build forward difference table
+    for (int i = 1; i < n; i++) {
+        for (int j = 0; j < n - i; j++) {
+            y[j][i] = y[j+1][i-1] - y[j][i-1];
+        }
+    }
+
+    h = x[1] - x[0];
+    u = (value - x[0]) / h;
+    result = y[0][0];
+
+    for (int i = 1; i < n; i++) {
+        float term = y[0][i];
+        for (int j = 0; j < i; j++) {
+            term *= (u - j);
+        }
+        result += term / factorial(i);
+    }
+
+    printf("Interpolated value at x = %.2f is %.4f\n", value, result);
+    return 0;
+}
+
